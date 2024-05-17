@@ -25,6 +25,6 @@ interface EmailDao {
     @Query(value = "SELECT * FROM tbl_email WHERE email = :email")
     fun findByEmail(email: String): Email
 
-//    @Query(value = "SELECT * FROM tbl_email WHERE marcador = :marcador")
-//    fun findByMarcador(marcador: String): List<Email>
+    @Query(value = "SELECT * FROM tbl_email WHERE marcador = :marcador")
+    fun findByMarcador(marcador: String): List<Email>
 }

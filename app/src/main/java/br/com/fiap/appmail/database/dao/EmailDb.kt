@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import br.com.fiap.appmail.modal.Conversor
 import br.com.fiap.appmail.modal.Email
 
 @Database(entities = [Email::class], version = 1)
+@TypeConverters(Conversor::class)
 abstract class EmailDb : RoomDatabase() {
 
     abstract fun emailDao(): EmailDao

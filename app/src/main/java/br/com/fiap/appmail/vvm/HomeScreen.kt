@@ -21,7 +21,9 @@ import br.com.fiap.appmail.ui.theme.AppMailTheme
 @Composable
 fun HomeScreen(navController: NavController) {
     Spacer(modifier = Modifier.height(40.dp))
+
     val viewModel = viewModel<HomeScreenViewModel>()
+
     Column {
         BarraPesquisa(
             value = viewModel.searchText.value,

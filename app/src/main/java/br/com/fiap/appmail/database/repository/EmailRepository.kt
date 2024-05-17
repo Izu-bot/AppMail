@@ -27,4 +27,8 @@ class EmailRepository(context: Context) {
     fun findByEmail(email: String): Email {
         return db.findByEmail(email)
     }
+
+    fun findByMarcador(marcador: String): List<Email> {
+        return db.findByMarcador(marcador)
+    }
 }
