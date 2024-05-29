@@ -1,7 +1,6 @@
 package br.com.fiap.appmail.vvm
 
 import android.content.res.Configuration
-import android.widget.Space
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,18 +8,28 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,17 +44,17 @@ import br.com.fiap.appmail.database.repository.EmailRepository
 import br.com.fiap.appmail.modal.Email
 import br.com.fiap.appmail.modal.MarcadoresEnum
 import br.com.fiap.appmail.ui.theme.AppMailTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun EnviarEmailScreen(modifier: Modifier = Modifier) {
+
+    val viewModel: EnviarEmailViewModel = viewModel()
 
     val context = LocalContext.current
     val emailRepository = EmailRepository(context)
 
     var buttonText by remember { mutableStateOf("Marcadores") }
-
-
-    val viewModel = viewModel<EnviarEmailViewModel>()
 
     Surface {
         Column {
@@ -62,7 +71,7 @@ fun EnviarEmailScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(5.dp),
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(10.dp),
             )
             MyOutlined(
                 value = viewModel.email.value,
@@ -75,14 +84,14 @@ fun EnviarEmailScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(5.dp),
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(10.dp),
             )
             MyOutlined(
                 value = viewModel.mensagem.value,
                 onValueChange = { viewModel.mensagem.value = it },
                 label = "Mensagem",
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
+                    keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
                 ),
                 maxLines = 4,
@@ -90,8 +99,9 @@ fun EnviarEmailScreen(modifier: Modifier = Modifier) {
                     .padding(5.dp)
                     .height(100.dp)
                     .fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(10.dp),
             )
+
             Spacer(modifier = Modifier.height(10.dp))
 
             Divider()
@@ -138,29 +148,30 @@ fun EnviarEmailScreen(modifier: Modifier = Modifier) {
             }
 
             Spacer(modifier = Modifier.padding(10.dp))
-            Button(onClick = {
-                if(viewModel.email.value.isEmpty() || viewModel.titulo.value.isEmpty()|| viewModel.mensagem.value.isEmpty() || viewModel.selectedMarcador.value == null){
-                    return@Button
-                } else {
-                    val enviarEmail = Email(
-                        tituloEmail = viewModel.titulo.value,
-                        email = viewModel.email.value,
-                        mensagem = viewModel.mensagem.value,
-                        marcador = viewModel.selectedMarcador.value!!
-                    )
-                    emailRepository.salvar(enviarEmail)
-                    viewModel.titulo.value = ""
-                    viewModel.email.value = ""
-                    viewModel.mensagem.value = ""
-                    viewModel.selectedMarcador.value = null
-                }
-            },
+            Button(
+                onClick = {
+                    if (viewModel.email.value.isEmpty() || viewModel.titulo.value.isEmpty() || viewModel.mensagem.value.isEmpty() || viewModel.selectedMarcador.value == null) {
+                        return@Button
+                    } else {
+                        val enviarEmail = Email(
+                            tituloEmail = viewModel.titulo.value,
+                            email = viewModel.email.value,
+                            mensagem = viewModel.mensagem.value,
+                            marcador = viewModel.selectedMarcador.value!!
+                        )
+                        emailRepository.salvar(enviarEmail)
+                        viewModel.titulo.value = ""
+                        viewModel.email.value = ""
+                        viewModel.mensagem.value = ""
+                        viewModel.selectedMarcador.value = null
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF6650a4),
                     contentColor = Color.White
                 ),
                 modifier = Modifier.padding(15.dp)
-                ) {
+            ) {
                 Text(text = "Enviar")
             }
 

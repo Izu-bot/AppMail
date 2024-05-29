@@ -19,11 +19,8 @@ interface EmailDao {
     @Delete
     fun delete(email: Email): Int
 
-    @Query(value = "SELECT * FROM tbl_email")
+    @Query(value = "SELECT * FROM tbl_email ORDER BY id DESC")
     fun getAll(): List<Email>
-
-    @Query(value = "SELECT * FROM tbl_email WHERE email = :email")
-    fun findByEmail(email: String): Email
 
     @Query(value = "SELECT * FROM tbl_email WHERE marcador = :marcador")
     fun findByMarcador(marcador: String): List<Email>

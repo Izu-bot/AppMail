@@ -3,7 +3,6 @@ package br.com.fiap.appmail.modal
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDate
 
 @Entity(tableName = "tbl_email")
 data class Email(

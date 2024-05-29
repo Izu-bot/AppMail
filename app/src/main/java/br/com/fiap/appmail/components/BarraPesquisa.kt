@@ -14,7 +14,8 @@ fun BarraPesquisa(
     onValueChange: (String) -> Unit,
     placeholder: String,
     colors: TextFieldColors,
-    modifier: Modifier
+    modifier: Modifier,
+    trailingIcon: @Composable () -> Unit
 ) {
     TextField(
         value = value,
@@ -23,7 +24,8 @@ fun BarraPesquisa(
         placeholder = {
             Text(text = placeholder)
         },
-        colors = colors
+        colors = colors,
+        trailingIcon = trailingIcon
     )
 }
 

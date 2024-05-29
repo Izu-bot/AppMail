@@ -24,8 +24,10 @@ class EmailRepository(context: Context) {
         return db.getAll()
     }
 
-    fun findByEmail(email: String): Email {
-        return db.findByEmail(email)
+    fun getEmailByEmail(email: String): List<Email> {
+        return getAll().filter {
+            it.email.startsWith(prefix = email, ignoreCase = true)
+        }
     }
 
     fun findByMarcador(marcador: String): List<Email> {

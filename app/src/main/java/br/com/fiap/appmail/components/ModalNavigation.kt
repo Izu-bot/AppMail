@@ -10,10 +10,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,6 +47,12 @@ import br.com.fiap.appmail.vvm.TelaScreen
 import kotlinx.coroutines.launch
 
 val itemPrincipal = listOf(
+    MyNavigationDrawer(
+        label = "Home",
+        selectedIcon = Icons.Default.Home,
+        unselectedIcon = Icons.Outlined.Home,
+        route = "home"
+    ),
     MyNavigationDrawer(
         label = "Escreva",
         selectedIcon = Icons.Default.Create,
@@ -142,8 +150,8 @@ fun ModalNavigation() {
                             modifier = Modifier.fillMaxSize()
                         ) {
                             composable(route = "home") { HomeScreen(navController) }
-                            composable(route = "tela") { TelaScreen() }
                             composable(route = "enviar") { EnviarEmailScreen() }
+                            composable(route = "tela") { TelaScreen() }
                         }
                     }
                 }
