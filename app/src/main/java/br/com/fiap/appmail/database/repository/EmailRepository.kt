@@ -16,7 +16,7 @@ class EmailRepository(context: Context) {
         return db.update(email)
     }
 
-    fun delete(email:Email): Int{
+    fun delete(email:Email): Int {
         return db.delete(email)
     }
 
@@ -32,5 +32,9 @@ class EmailRepository(context: Context) {
 
     fun findByMarcador(marcador: String): List<Email> {
         return db.findByMarcador(marcador)
+    }
+
+    fun getMarcador(): List<String> {
+        return db.getMarcador()
     }
 }

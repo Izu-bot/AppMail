@@ -24,4 +24,7 @@ interface EmailDao {
 
     @Query(value = "SELECT * FROM tbl_email WHERE marcador = :marcador")
     fun findByMarcador(marcador: String): List<Email>
+
+    @Query(value = "SELECT DISTINCT marcador FROM tbl_email")
+    fun getMarcador(): List<String>
 }

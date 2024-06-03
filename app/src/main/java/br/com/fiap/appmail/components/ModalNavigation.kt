@@ -41,9 +41,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.fiap.appmail.modal.MyNavigationDrawer
+import br.com.fiap.appmail.vvm.CriarMarcadores
 import br.com.fiap.appmail.vvm.EnviarEmailScreen
 import br.com.fiap.appmail.vvm.HomeScreen
-import br.com.fiap.appmail.vvm.TelaScreen
 import kotlinx.coroutines.launch
 
 val itemPrincipal = listOf(
@@ -63,7 +63,7 @@ val itemPrincipal = listOf(
         label = "Criar marcador",
         selectedIcon = Icons.Default.AddCircle,
         unselectedIcon = Icons.Outlined.AddCircle,
-        route = "tela"
+        route = "marcadores"
     ),
     MyNavigationDrawer(
         label = "Calendario",
@@ -138,7 +138,7 @@ fun ModalNavigation() {
                 )
             },
             content = {
-                // Adicione seu conteúdo aqui
+                // conteúdo aqui
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
@@ -151,7 +151,7 @@ fun ModalNavigation() {
                         ) {
                             composable(route = "home") { HomeScreen(navController) }
                             composable(route = "enviar") { EnviarEmailScreen() }
-                            composable(route = "tela") { TelaScreen() }
+                            composable(route = "marcadores") { CriarMarcadores() }
                         }
                     }
                 }

@@ -6,30 +6,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarData
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,15 +31,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fiap.appmail.components.MyOutlined
 import br.com.fiap.appmail.database.repository.EmailRepository
+import br.com.fiap.appmail.database.repository.MarcadorRepository
 import br.com.fiap.appmail.modal.Email
 import br.com.fiap.appmail.modal.MarcadoresEnum
 import br.com.fiap.appmail.ui.theme.AppMailTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun EnviarEmailScreen(modifier: Modifier = Modifier) {
 
     val viewModel: EnviarEmailViewModel = viewModel()
+
+    val contextMarcador = LocalContext.current
+    val marcadorRepository = MarcadorRepository(contextMarcador)
 
     val context = LocalContext.current
     val emailRepository = EmailRepository(context)
@@ -124,7 +117,8 @@ fun EnviarEmailScreen(modifier: Modifier = Modifier) {
                     title = { Text("Selecione um marcador padrão") },
                     text = {
                         Column {
-                            MarcadoresEnum.values().forEach { marcador ->
+                            // Talves tenho que reescrever isso aqui
+                            MarcadoresEnum.entries.forEach { marcador ->
                                 Button(
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = Color.Transparent,
@@ -132,12 +126,30 @@ fun EnviarEmailScreen(modifier: Modifier = Modifier) {
                                     ),
 
                                     onClick = {
-                                        viewModel.selectedMarcador.value = marcador
+                                        viewModel.selectedMarcador.value = marcador.name
                                         buttonText = marcador.name
                                         viewModel.showDialog.value = false
                                     }
                                 ) {
                                     Text(marcador.name)
+                                }
+                            }
+                            LazyColumn {
+                                items(marcadorRepository.getMarcadorPersonalizado()) {
+                                    Button(
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = Color.Transparent,
+                                            contentColor = Color.White
+                                        ),
+
+                                        onClick = {
+                                            viewModel.selectedMarcador.value = it
+                                            buttonText = it
+                                            viewModel.showDialog.value = false
+                                        }
+                                    ) {
+                                        Text(it)
+                                    }
                                 }
                             }
                         }
@@ -150,20 +162,24 @@ fun EnviarEmailScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.padding(10.dp))
             Button(
                 onClick = {
-                    if (viewModel.email.value.isEmpty() || viewModel.titulo.value.isEmpty() || viewModel.mensagem.value.isEmpty() || viewModel.selectedMarcador.value == null) {
+                    if (viewModel.email.value.isEmpty() ||
+                        viewModel.titulo.value.isEmpty() ||
+                        viewModel.mensagem.value.isEmpty() ||
+                        viewModel.selectedMarcador.value.isEmpty()){
                         return@Button
                     } else {
+
                         val enviarEmail = Email(
                             tituloEmail = viewModel.titulo.value,
                             email = viewModel.email.value,
                             mensagem = viewModel.mensagem.value,
-                            marcador = viewModel.selectedMarcador.value!!
+                            marcador = viewModel.selectedMarcador.value
                         )
                         emailRepository.salvar(enviarEmail)
                         viewModel.titulo.value = ""
                         viewModel.email.value = ""
                         viewModel.mensagem.value = ""
-                        viewModel.selectedMarcador.value = null
+                        viewModel.selectedMarcador.value = ""
                     }
                 },
                 colors = ButtonDefaults.buttonColors(

@@ -10,5 +10,5 @@ data class Email(
     val email: String = "",
     @ColumnInfo(name = "titulo_email") val tituloEmail: String = "",
     val mensagem: String = "",
-    val marcador: MarcadoresEnum
+    val marcador: String = ""
 )

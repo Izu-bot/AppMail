@@ -13,5 +13,5 @@ class EnviarEmailViewModel: ViewModel() {
     var titulo = mutableStateOf("")
     var mensagem = mutableStateOf("")
     var showDialog = mutableStateOf(false)
-    var selectedMarcador = mutableStateOf<MarcadoresEnum?>(null)
+    var selectedMarcador = mutableStateOf("")
 }
