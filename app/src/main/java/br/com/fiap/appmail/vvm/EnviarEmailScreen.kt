@@ -143,12 +143,12 @@ fun EnviarEmailScreen(modifier: Modifier = Modifier) {
                                         ),
 
                                         onClick = {
-                                            viewModel.selectedMarcador.value = it
-                                            buttonText = it
+                                            viewModel.selectedMarcador.value = it.nomeMarcador
+                                            buttonText = it.nomeMarcador
                                             viewModel.showDialog.value = false
                                         }
                                     ) {
-                                        Text(it)
+                                        Text(it.nomeMarcador)
                                     }
                                 }
                             }

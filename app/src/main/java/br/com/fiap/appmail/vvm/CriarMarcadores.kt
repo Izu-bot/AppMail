@@ -7,20 +7,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -50,6 +51,7 @@ fun CriarMarcadores(modifier: Modifier = Modifier) {
     val marcadoresRepository = MarcadorRepository(context)
 
     var marcador by rememberSaveable { mutableStateOf("") }
+    var marcadores by rememberSaveable { mutableStateOf(marcadoresRepository.getAllMarcadores()) }
 
     Column {
         Spacer(
@@ -59,7 +61,10 @@ fun CriarMarcadores(modifier: Modifier = Modifier) {
         )
         Text(
             text = "Marcadores",
-            fontFamily = MaterialTheme.typography.titleMedium.fontFamily,
+            fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+            fontSize = 30.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
 
         Row(
@@ -93,6 +98,7 @@ fun CriarMarcadores(modifier: Modifier = Modifier) {
                     } else {
                         return@Button
                     }
+                    marcadores = marcadoresRepository.getAllMarcadores()
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -106,34 +112,51 @@ fun CriarMarcadores(modifier: Modifier = Modifier) {
         Divider()
         Spacer(modifier = Modifier.height(16.dp))
         Column {
-            Text(text = "Seus marcadores")
+            Text(
+                text = "Seus marcadores",
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                fontStyle = MaterialTheme.typography.titleMedium.fontStyle
+            )
 
             LazyColumn {
-                items(marcadoresRepository.getAllMarcadores()){
+                items(marcadores) { marcador ->
                     ElevatedCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFF5E5E5E),
+                            containerColor = MaterialTheme.colorScheme.tertiary,
                             contentColor = Color.Black
                         )
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = it,
-                                fontSize = 30.sp,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(10.dp)
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = (marcador.nomeMarcador.lowercase().replaceFirstChar { char -> char.uppercase() }),
+                                    fontSize = 30.sp,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                                IconButton(
+                                    onClick = {
+                                        marcadoresRepository.delete(marcador)
+                                        marcadores = marcadoresRepository.getAllMarcadores()
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Deletar"
+                                    )
+                                }
+                            }
                         }
-
                     }
                 }
             }
         }
     }
-}

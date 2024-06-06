@@ -21,11 +21,11 @@ class MarcadorRepository(contex: Context) {
         return db.update(marcador)
     }
 
-    fun getAllMarcadores(): List<String>{
+    fun getAllMarcadores(): List<MarcadorPersonalizado>{
         return db.getMarcadorPersonalizado()
     }
 
-    fun getMarcadorPersonalizado(): List<String>{
+    fun getMarcadorPersonalizado(): List<MarcadorPersonalizado>{
         return db.getMarcadorPersonalizado()
     }
 }

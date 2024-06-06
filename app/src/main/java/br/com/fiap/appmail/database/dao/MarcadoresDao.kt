@@ -19,6 +19,6 @@ interface MarcadoresDao {
     @Update
     fun update(marcador: MarcadorPersonalizado): Int
 
-    @Query(value = "SELECT DISTINCT nome_marcador FROM tbl_marcador_personalizado")
-    fun getMarcadorPersonalizado(): List<String>
+    @Query(value = "SELECT DISTINCT id, nome_marcador FROM tbl_marcador_personalizado")
+    fun getMarcadorPersonalizado(): List<MarcadorPersonalizado>
 }
