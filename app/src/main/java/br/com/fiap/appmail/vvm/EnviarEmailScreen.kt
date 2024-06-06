@@ -14,6 +14,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -122,7 +123,7 @@ fun EnviarEmailScreen(modifier: Modifier = Modifier) {
                                 Button(
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = Color.Transparent,
-                                        contentColor = Color.White
+                                        contentColor = MaterialTheme.colorScheme.secondary
                                     ),
 
                                     onClick = {
@@ -139,7 +140,7 @@ fun EnviarEmailScreen(modifier: Modifier = Modifier) {
                                     Button(
                                         colors = ButtonDefaults.buttonColors(
                                             containerColor = Color.Transparent,
-                                            contentColor = Color.White
+                                            contentColor = MaterialTheme.colorScheme.secondary
                                         ),
 
                                         onClick = {
@@ -180,6 +181,7 @@ fun EnviarEmailScreen(modifier: Modifier = Modifier) {
                         viewModel.email.value = ""
                         viewModel.mensagem.value = ""
                         viewModel.selectedMarcador.value = ""
+                        buttonText = "Marcadores"
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
