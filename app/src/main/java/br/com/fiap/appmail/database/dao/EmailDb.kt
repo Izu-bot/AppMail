@@ -5,16 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import br.com.fiap.appmail.modal.Calendario
 import br.com.fiap.appmail.modal.Conversor
 import br.com.fiap.appmail.modal.Email
 import br.com.fiap.appmail.modal.MarcadorPersonalizado
 
-@Database(entities = [Email::class, MarcadorPersonalizado::class], version = 2)
+@Database(entities = [Email::class, MarcadorPersonalizado::class, Calendario::class ], version = 3)
 @TypeConverters(Conversor::class)
 abstract class EmailDb : RoomDatabase() {
 
     abstract fun emailDao(): EmailDao
     abstract fun marcadorDao(): MarcadoresDao
+
+    abstract fun calendarioDao(): CalendarioDao
     companion object {
 
         private lateinit var instance: EmailDb
