@@ -1,4 +1,4 @@
-package br.com.fiap.appmail.modal
+package br.com.fiap.appmail.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

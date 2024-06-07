@@ -40,7 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.fiap.appmail.modal.MyNavigationDrawer
+import br.com.fiap.appmail.model.MyNavigationDrawer
+import br.com.fiap.appmail.vvm.CalendarScreen
 import br.com.fiap.appmail.vvm.CriarMarcadores
 import br.com.fiap.appmail.vvm.EnviarEmailScreen
 import br.com.fiap.appmail.vvm.HomeScreen
@@ -69,7 +70,7 @@ val itemPrincipal = listOf(
         label = "Calendario",
         selectedIcon = Icons.Default.DateRange,
         unselectedIcon = Icons.Outlined.DateRange,
-        route = "tela"
+        route = "calendario"
     ),
 )
 
@@ -152,6 +153,7 @@ fun ModalNavigation() {
                             composable(route = "home") { HomeScreen(navController) }
                             composable(route = "enviar") { EnviarEmailScreen() }
                             composable(route = "marcadores") { CriarMarcadores() }
+                            composable(route = "calendario") { CalendarScreen() }
                         }
                     }
                 }

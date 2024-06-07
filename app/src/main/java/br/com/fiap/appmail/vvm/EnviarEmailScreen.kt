@@ -33,8 +33,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fiap.appmail.components.MyOutlined
 import br.com.fiap.appmail.database.repository.EmailRepository
 import br.com.fiap.appmail.database.repository.MarcadorRepository
-import br.com.fiap.appmail.modal.Email
-import br.com.fiap.appmail.modal.MarcadoresEnum
+import br.com.fiap.appmail.model.Email
+import br.com.fiap.appmail.model.MarcadoresEnum
 import br.com.fiap.appmail.ui.theme.AppMailTheme
 
 @Composable

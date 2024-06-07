@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import br.com.fiap.appmail.modal.Email
+import br.com.fiap.appmail.model.Email
 
 @Dao
 interface EmailDao {

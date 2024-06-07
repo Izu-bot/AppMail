@@ -14,7 +14,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -42,7 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.appmail.database.repository.MarcadorRepository
-import br.com.fiap.appmail.modal.MarcadorPersonalizado
+import br.com.fiap.appmail.model.MarcadorPersonalizado
 
 @Composable
 fun CriarMarcadores(modifier: Modifier = Modifier) {

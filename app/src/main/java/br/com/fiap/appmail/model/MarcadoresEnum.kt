@@ -1,4 +1,4 @@
-package br.com.fiap.appmail.modal
+package br.com.fiap.appmail.model
 
 enum class MarcadoresEnum {
     IMPORTANT,

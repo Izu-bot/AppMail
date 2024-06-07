@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import br.com.fiap.appmail.modal.Calendario
+import br.com.fiap.appmail.model.Calendario
 
 @Dao
 interface CalendarioDao {

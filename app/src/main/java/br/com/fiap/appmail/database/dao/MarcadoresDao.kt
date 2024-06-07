@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import br.com.fiap.appmail.modal.MarcadorPersonalizado
+import br.com.fiap.appmail.model.MarcadorPersonalizado
 
 @Dao
 interface MarcadoresDao {

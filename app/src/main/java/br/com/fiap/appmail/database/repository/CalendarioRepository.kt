@@ -2,7 +2,7 @@ package br.com.fiap.appmail.database.repository
 
 import android.content.Context
 import br.com.fiap.appmail.database.dao.EmailDb
-import br.com.fiap.appmail.modal.Calendario
+import br.com.fiap.appmail.model.Calendario
 
 class CalendarioRepository(context: Context) {
 
