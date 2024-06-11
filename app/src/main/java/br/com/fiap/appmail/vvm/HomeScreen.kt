@@ -104,10 +104,8 @@ fun HomeScreen(navController: NavController) {
                 }
             }
         }
-        ListaEmail(listaEmail = listaEmail)
+        ListaEmail( listaEmail = listaEmail)
     }
-
-
 }
 
 @Preview
