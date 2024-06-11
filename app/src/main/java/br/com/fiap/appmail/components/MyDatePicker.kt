@@ -1,5 +1,8 @@
 package br.com.fiap.appmail.components
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,6 +14,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
@@ -21,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
@@ -28,7 +35,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
@@ -58,11 +67,22 @@ fun MyDatePicker(modifier: Modifier = Modifier) {
     var descricao by remember {
         mutableStateOf("")
     }
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
+    var descricaoEditada by remember {
+        mutableStateOf("")
+    }
+    var itemEditando by remember {
+        mutableStateOf<Calendario?>(null)
+    }
 
     val datePickerState = rememberDatePickerState()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val calendarioRepository = CalendarioRepository(context)
+    var listaLembretes by rememberSaveable { mutableStateOf(calendarioRepository.getAll()) }
+
 
     if (showDatePickerDialog) {
         DatePickerDialog(
@@ -114,27 +134,27 @@ fun MyDatePicker(modifier: Modifier = Modifier) {
             .fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
     )
-    
+
     IconButton(
         onClick = {
-                  if (selectedDate.isNotEmpty() and descricao.isNotEmpty()) {
-                      val enviarCalendario = Calendario(
-                          data = selectedDate,
-                          descricao = descricao
-                      )
-                      calendarioRepository.save(enviarCalendario)
-                      selectedDate = ""
-                      descricao = ""
-                      calendarioRepository.getAll()
-                  } else {
-                      return@IconButton
-                  }
+            if (selectedDate.isNotEmpty() and descricao.isNotEmpty()) {
+                val enviarCalendario = Calendario(
+                    data = selectedDate,
+                    descricao = descricao
+                )
+                calendarioRepository.save(enviarCalendario)
+                selectedDate = ""
+                descricao = ""
+                listaLembretes = calendarioRepository.getAll()
+            } else {
+                return@IconButton
+            }
         },
         modifier.size(60.dp)
     ) {
         Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Accept")
     }
-    
+
     Spacer(modifier.padding(10.dp))
     Divider()
     Spacer(modifier.padding(10.dp))
@@ -145,7 +165,7 @@ fun MyDatePicker(modifier: Modifier = Modifier) {
         modifier = modifier.padding(16.dp)
     )
     LazyColumn {
-        items(calendarioRepository.getAll()) {
+        items(listaLembretes) {
             ElevatedCard(
                 elevation = CardDefaults.cardElevation(
                     defaultElevation = 6.dp
@@ -156,24 +176,75 @@ fun MyDatePicker(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-            ){
-                Text(
-                    text = it.data,
-                    modifier = Modifier.padding(16.dp),
-                    fontStyle = MaterialTheme.typography.titleLarge.fontStyle
-                )
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = it.data,
+                        modifier = Modifier.padding(16.dp),
+                        fontStyle = MaterialTheme.typography.titleLarge.fontStyle
+                    )
+                    IconButton(onClick = {
+                        showDialog = true
+                        itemEditando = it
+                        descricaoEditada = it.descricao
+                    }) {
+                        Icon(imageVector = Icons.Default.Create, contentDescription = "Update")
+                    }
+                    if (showDialog) {
+                        AlertDialog(
+                            onDismissRequest = { showDialog = false },
+                            title = { Text(text = "Editar Lembrete") },
+                            text = {
+                                Column {
+                                    OutlinedTextField(
+                                        value = descricaoEditada,
+                                        onValueChange = { descricaoEditada = it },
+                                        label = { Text(text = "Descrição") },
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                    Button(onClick = {
+                                        itemEditando?.let { item ->
+                                            val itemAtualizado = item.copy(
+                                                descricao = descricaoEditada
+                                            )
+                                            calendarioRepository.update(itemAtualizado)
+                                            listaLembretes = calendarioRepository.getAll()
+                                        }
+                                        showDialog = false
+                                    },
+                                        modifier = Modifier.padding(16.dp)
+                                    ) {
+                                        Text(text = "Salvar")
+                                    }
+                                }
+                            },
+                            confirmButton = {},
+                            dismissButton = {}
+                        )
+                    }
+                    IconButton(onClick = {
+                        calendarioRepository.delete(it)
+                        listaLembretes = calendarioRepository.getAll()
+                    }) {
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                    }
+                }
                 Divider(
                     color = Color.Black,
                 )
                 Text(
-                    text = it.descricao,
+                    text = it.descricao.lowercase().replaceFirstChar { char -> char.uppercase() },
                     modifier = Modifier.padding(16.dp)
                 )
             }
         }
     }
-
 }
+
 
 // Função para formatar a data para o padrão brasileiro
 fun Long.toBrazilianDateFormat(
